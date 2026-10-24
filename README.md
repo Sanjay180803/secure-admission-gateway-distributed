@@ -57,9 +57,9 @@ spins up 4 real replica processes + a real backend, twice:
   **exactly 10 credits issued**, no matter how many replicas or how much
   concurrent load.
 
-**Concurrency stress test:** `tests/test_distributed.py` runs 20
-concurrent connections racing to reserve credits against a budget of 10 --
-total issued never exceeds 10, proving atomicity under real concurrency.
+**Concurrency stress test:** `tests/test_ledger.py` runs 20- and 50-way
+concurrent reservations against a budget of 10 (exactly 10 issued each
+time) and a 20-way concurrent spend of one credit (exactly one succeeds).
 
 **Full end-to-end path, across replicas:** `scripts/end_to_end_demo.py`
 requests credits from one replica, spends each one against a *different*
@@ -157,9 +157,10 @@ redis-server --daemonize yes
 pip install -r requirements.txt
 ```
 
-**Correctness tests (ledger atomicity, exactly-once spend, blocking):**
+**Tests (ledger atomicity, single-use spend, blocking, HTTP admission, Redis-down behavior):**
 ```bash
-python3 tests/test_distributed.py
+pip install -r requirements-dev.txt
+pytest tests -v
 ```
 
 **Isolated vs. coordinated proof (the headline demo):**
