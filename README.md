@@ -43,16 +43,16 @@ Details: [docs/architecture.md](docs/architecture.md) ·
 ## Results
 
 From `scripts/benchmark_report.py` (4 replica processes, 1 backend,
-Redis 7 on the same host; 2-vCPU Xeon @ 2.1 GHz). Single run; rerun it to
-get numbers for your machine.
+Redis 7 on the same host; 2-vCPU Xeon @ 2.1 GHz), 4 runs. Methodology,
+per-run numbers and caveats: [docs/benchmarks.md](docs/benchmarks.md).
 
 | Measurement | Result |
 |---|---|
-| Credits issued, 4 replicas, budget 10, **isolated** | 41 (4.1× over-admission) |
+| Credits issued, 4 replicas, budget 10, **isolated** | 40–41 (4.0–4.1× over-admission) |
 | Credits issued, 4 replicas, budget 10, **coordinated** | 10 |
 | 20 concurrent reservation attempts, budget 10 | 10 issued, 0 over budget |
-| 10 credits each spent twice concurrently | 10 accepted, 10 rejected as replays |
-| Coordination cost per reservation (p50) | +0.08 ms with local Redis; earlier runs on a laptop measured +1.5 ms |
+| 10 credits each spent twice concurrently | 10 accepted, 10 rejected as replays (every run) |
+| Coordination cost per reservation (p50) | +0.08–0.10 ms with Redis on loopback (about one network RTT otherwise) |
 | Bad-signature attempts before a client is blocked | 3 |
 | Backend work, `complexity` 2 → 80 | 1.3 ms → 50 ms |
 
@@ -122,6 +122,10 @@ scripts/             demos and benchmark report
 tests/               pytest suite
 docs/                architecture and consistency guarantees
 ```
+
+## License
+
+MIT — see [LICENSE](LICENSE).
 
 ## Reference
 
